@@ -1,9 +1,8 @@
 node_modules/
-backend/node_modules/
-fronted/node_modules/
+Backend/node_modules/
+Frontend/node_modules/
 .env
-backend/.env
-fronted/.env
-dist/
-build/
+Backend/.env
+Frontend/.env
+Frontend/dist/
 *.log
