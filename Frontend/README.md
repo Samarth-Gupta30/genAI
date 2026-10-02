@@ -1,16 +1,27 @@
-# React + Vite
+# GenAI Full-Stack Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack AI-powered web application leveraging React (Vite), Node.js, Express, MongoDB Atlas, and Google Gemini AI.
 
-Currently, two official plugins are available:
+## 🚀 Live Links
+- **Live Frontend Application:** `https://genai-frontend.onrender.com`
+- **Live Backend API Base URL:** `https://genai-backend-api.onrender.com`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Features
+- **Interactive UI**: Responsive frontend interface built with React 19 and Vite.
+- **Generative AI Workflows**: Express backend connected to Google GenAI SDK (Gemini API).
+- **Database Integration**: Cloud MongoDB Atlas storage with Mongoose schemas.
+- **Production Architecture**: Decoupled deployment with environment secret injection and CORS management.
 
-## React Compiler
+## 🛠 Tech Stack
+- **Frontend**: React.js, Vite, Tailwind CSS / CSS
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB Atlas
+- **AI Service**: Google GenAI (Gemini API)
+- **Deployment**: Render
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Local Setup
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1. Clone repository:
+   ```bash
+   git clone [https://github.com/Samarth-Gupta30/genAI.git](https://github.com/Samarth-Gupta30/genAI.git)
+   cd genAI
