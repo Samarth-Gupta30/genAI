@@ -1,0 +1,78 @@
+.button {
+    width: 25vw;
+    max-width: 200px;
+    min-width: 100px;
+    height: 36px;
+    font-size: 13px;
+    padding: 6px 12px;
+    line-height: 1;
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+}
+
+.button:active {
+    transform: scale(0.95);
+}
+
+/* Logout icon */
+.logout-icon {
+    display: inline-block;
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+/* Animation after clicking */
+.button.logging-out {
+    animation: logoutPulse 0.8s ease infinite;
+}
+
+.button.logging-out .logout-icon {
+    animation: logoutArrow 0.8s ease-in-out infinite;
+}
+
+/* Button pulse */
+@keyframes logoutPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.96);
+        opacity: 0.75;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Arrow moves toward logout direction */
+@keyframes logoutArrow {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateX(6px);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
