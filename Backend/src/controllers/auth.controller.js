@@ -3,6 +3,14 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const tokenBlacklistModel = require("../models/blacklist.model");
 
+const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 24 * 60 * 60 * 1000,
+    path: "/",
+};
+
 async function registerUserController(req,res){
 
 const  {username,email,password} = req.body;
@@ -38,7 +46,7 @@ const token = jwt.sign({
     id: user._id,username: user.username
 }, process.env.JWT_SECRET,{expiresIn: "1d"});
 
-res.cookie("token",token)
+res.cookie("token",token,cookieOptions)
 
 return res.status(201).json({
    
@@ -80,7 +88,7 @@ const token = jwt.sign({
     id: user._id,username: user.username
 }, process.env.JWT_SECRET,{expiresIn: "1d"});
 
-res.cookie("token",token)
+res.cookie("token",token,cookieOptions)
 
 return res.status(201).json({
    

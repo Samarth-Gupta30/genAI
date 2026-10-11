@@ -1,31 +1,16 @@
 const express = require("express");
-const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+}));
+
 app.use(express.json());
 app.use(cookieParser());
-
-// Allowed origins for local development and Render production
-const allowedOrigins = [
-    "https://genai-frontend-ixp0.onrender.com",
-    "http://localhost:5173"
-];
-
-app.use(cors({
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like Postman, curl, or server-to-server calls)
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-}));
 
 // Root health check route (prevents "Cannot GET /" message)
 app.get("/", (req, res) => {
@@ -35,6 +20,7 @@ app.get("/", (req, res) => {
     });
 });
 
+// Register your routes after cookieParser().
 const authRouter = require("./routes/auth.routes");
 const interviewRouter = require("./routes/interview.routes");
 
