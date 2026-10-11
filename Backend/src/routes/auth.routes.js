@@ -4,17 +4,12 @@ const authMiddleware = require("../middlewares/auth.middleware");
 
 const authRouter = Router();
 
+authRouter.post("/register", authController.registerUserController);
+authRouter.post("/login", authController.loginUserController);
 
-authRouter.post("/register",authController.registerUserController);
+// Change .get to .post here:
+authRouter.post("/logout", authController.logoutUserController);
 
-authRouter.post("/login",authController.loginUserController);
+authRouter.get("/get-me", authMiddleware.authUser, authController.getMeController);
 
-authRouter.get("/logout",authController.logoutUserController);
-
-authRouter.get("/get-me",authMiddleware.authUser, authController.getMeController);
-     
-
-
-module.exports = authRouter
-
-
+module.exports = authRouter;
