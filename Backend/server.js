@@ -1,13 +1,15 @@
-const dns = require('node:dns').promises;
-dns.setServers(["1.1.1.1", "8.8.8.8"]);
+import dns from "node:dns";
+import dotenv from "dotenv";
+import app from "./src/app.js";
+import connectToDB from "./src/config/database.js";
 
-require("dotenv").config();
-const app = require("./src/app");
-const connectToDB = require("./src/config/database");
+const { promises: dnsPromises } = dns;
+dnsPromises.setServers(["1.1.1.1", "8.8.8.8"]);
+
+dotenv.config();
 
 connectToDB();
 
-
-app.listen(3000, () => {console.log("Listening on port 3000")
-
+app.listen(3000, () => {
+    console.log("Listening on port 3000");
 });

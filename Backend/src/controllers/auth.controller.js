@@ -1,7 +1,8 @@
-const userModel = require("../models/user.model");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const tokenBlacklistModel = require("../models/blacklist.model");
+
+import userModel from "../models/user.model.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import tokenBlacklistModel from "../models/blacklist.model.js";
 
 const cookieOptions = {
     httpOnly: true,
@@ -31,6 +32,7 @@ async function registerUserController(req, res) {
     }
 
     const hash = await bcrypt.hash(password, 10);
+
     const user = await userModel.create({
         username,
         email,
@@ -66,7 +68,10 @@ async function loginUserController(req, res) {
         });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(
+        password,
+        user.password
+    );
 
     if (!isPasswordValid) {
         return res.status(400).json({
@@ -82,7 +87,7 @@ async function loginUserController(req, res) {
 
     res.cookie("token", token, cookieOptions);
 
-    return res.status(201).json({
+    return res.status(200).json({
         message: "User logged in successfully",
         user: {
             id: user._id,
@@ -98,9 +103,10 @@ async function logoutUserController(req, res) {
     if (token) {
         await tokenBlacklistModel.create({ token });
     }
-    
+
     res.clearCookie("token", cookieOptions);
-    res.status(200).json({
+
+    return res.status(200).json({
         message: "User logged out successfully",
     });
 }
@@ -108,7 +114,13 @@ async function logoutUserController(req, res) {
 async function getMeController(req, res) {
     const user = await userModel.findById(req.user.id);
 
-    res.status(200).json({
+    if (!user) {
+        return res.status(404).json({
+            message: "User not found",
+        });
+    }
+
+    return res.status(200).json({
         message: "User found successfully",
         user: {
             id: user._id,
@@ -118,7 +130,7 @@ async function getMeController(req, res) {
     });
 }
 
-module.exports = {
+export {
     registerUserController,
     loginUserController,
     logoutUserController,
