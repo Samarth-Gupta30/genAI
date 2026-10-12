@@ -36,10 +36,14 @@ export const useAuth = () => {
         setLoading(true)
         try {
             const data = await register({ username, email, password })
-            return setAuthState(data)
-        } catch {
+            const success = setAuthState(data)
+            return { success, message: success ? "" : "Registration response did not include a user." }
+        } catch (error) {
             setUser(null)
-            return false
+            return {
+                success: false,
+                message: error.response?.data?.message || error.message || "Unable to create your account. Please try again."
+            }
         } finally {
             setLoading(false)
         }

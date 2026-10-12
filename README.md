@@ -89,7 +89,7 @@ PORT=5000
 MONGODB_URI=your_mongodb_atlas_connection_string
 JWT_SECRET=your_jwt_secret
 GEMINI_API_KEY=your_gemini_api_key
-CLIENT_URL=http://localhost:5173
+FRONTEND_URL=http://localhost:5173
 ```
 
 Start the server:
@@ -110,7 +110,7 @@ npm install
 Create a `.env` file in `Frontend/`:
 
 ```env
-VITE_API_URL=http://localhost:5000
+VITE_API_BASE_URL=http://localhost:3000
 ```
 
 Start the dev server:

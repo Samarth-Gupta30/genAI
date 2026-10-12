@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || "https://genai-backend-api.onrender.com",
-    withCredentials: true,
-})
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true,
+});
 
 export const generateInterviewReport = async ({
   jobDescription,
@@ -20,7 +20,6 @@ export const generateInterviewReport = async ({
 
   return response.data;
 };
-
 
 export const getInterviewReportById = async (interviewId) => {
   const response = await api.get(`/api/interview/report/${interviewId}`);

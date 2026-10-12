@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react'
 import {useNavigate, Link} from "react-router"
 import {useAuth} from "../hooks/useAuth"
 import Loader from '../../../components/Loader'
+import "../auth.form.scss"
 const Register = () => {
 
     const navigate = useNavigate();
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
 
     const { loading, user, handleRegister } = useAuth()
 
@@ -19,9 +21,12 @@ const Register = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        const success = await handleRegister({username, email, password})
-        if (success) {
+        setError("")
+        const result = await handleRegister({username, email, password})
+        if (result.success) {
             navigate("/", { replace: true })
+        } else {
+            setError(result.message)
         }
     };
 
@@ -44,6 +49,7 @@ if(loading){
         <div className="form-container">
           <h1 className="auth-card-title">Create Account</h1>
           <p className="auth-card-subtitle">Please enter your details to sign up.</p>
+          {error && <p className="auth-error" role="alert">{error}</p>}
 
           <form onSubmit={handleSubmit} className="auth-form">
             <div className="input-group">
