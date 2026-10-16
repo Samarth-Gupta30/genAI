@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import tokenBlacklistModel from "../models/blacklist.model.js";
 
 async function authUser(req, res, next) {
-    const token = req.cookies.token;
+    const token = req.cookies.token || req.get("authorization")?.replace(/^Bearer\s+/i, "");
 
     if (!token) {
         return res.status(401).json({

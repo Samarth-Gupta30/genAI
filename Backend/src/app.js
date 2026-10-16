@@ -10,13 +10,18 @@ const app = express();
 const allowedOrigins = [
   process.env.FRONTEND_URL,   // deployed frontend
   "http://localhost:5173",    // local frontend
-].filter(Boolean);
+].filter(Boolean).flatMap((origin) => origin.split(",").map((value) => value.trim()));
 
 app.set("trust proxy", 1);
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Origin is not allowed by CORS"));
+    },
     credentials: true,
   })
 );

@@ -3,28 +3,100 @@ import generateInterviewReport from "../services/ai.service.js";
 import interviewReportModel from "../models/interviewReport.model.js";
 import { generateResumePDF } from "../services/resume.service.js";
 
+
+
+// async function generateInterviewReportController(req, res) {
+//     try {
+//         const resumeContent = await (
+//             new pdfParse.PDFParse(
+//                 Uint8Array.from(req.file.buffer)
+//             )
+//         ).getText();
+
+//         const { selfDescription, jobDescription } = req.body;
+
+//         const interviewReportByAi = await generateInterviewReport({
+//             resume: resumeContent.text,
+//             selfDescription,
+//             jobDescription,
+//         });
+
+//         console.log("AI RESPONSE:");
+//         console.log(interviewReportByAi);
+
+//         const interviewReport = await interviewReportModel.create({
+//             user: req.user.id,
+//             resume: resumeContent.text,
+//             selfDescription,
+//             jobDescription,
+//             ...interviewReportByAi,
+//         });
+
+//         return res.status(201).json({
+//             message: "Interview report generated successfully",
+//             interviewReport,
+//         });
+//     } catch (error) {
+//         console.error("INTERVIEW REPORT ERROR:", error);
+
+//         if (error.status === 429) {
+//             return res.status(429).json({
+//                 message: "Gemini API quota exceeded. Please try again later.",
+//             });
+//         }
+
+//         return res.status(500).json({
+//             message: "Failed to generate interview report",
+//             error: error.message,
+//         });
+//     }
+// }
+
+
 async function generateInterviewReportController(req, res) {
     try {
-        const resumeContent = await (
-            new pdfParse.PDFParse(
-                Uint8Array.from(req.file.buffer)
-            )
-        ).getText();
+        console.log("---- /api/interview hit ----");
+        console.log("file:", req.file ? {
+            fieldname: req.file.fieldname,
+            originalname: req.file.originalname,
+            mimetype: req.file.mimetype,
+            size: req.file.size,
+        } : undefined);
+        console.log("body:", req.body);
+        console.log("user:", req.user);
 
         const { selfDescription, jobDescription } = req.body;
 
+        if (!jobDescription?.trim()) {
+            return res.status(400).json({ message: "Job description is required" });
+        }
+
+        if (!req.file && !selfDescription?.trim()) {
+            return res.status(400).json({
+                message: "Either a resume or a self description is required",
+            });
+        }
+
+        let resumeText = "";
+        if (req.file) {
+            const resumeContent = await (
+                new pdfParse.PDFParse(Uint8Array.from(req.file.buffer))
+            ).getText();
+            resumeText = resumeContent.text;
+            console.log("Resume text length:", resumeText.length);
+        }
+
         const interviewReportByAi = await generateInterviewReport({
-            resume: resumeContent.text,
+            resume: resumeText,
             selfDescription,
             jobDescription,
         });
 
-        console.log("AI RESPONSE:");
-        console.log(interviewReportByAi);
+        console.log("AI RESPONSE:", interviewReportByAi);
 
         const interviewReport = await interviewReportModel.create({
             user: req.user.id,
-            resume: resumeContent.text,
+            resume: resumeText,
             selfDescription,
             jobDescription,
             ...interviewReportByAi,

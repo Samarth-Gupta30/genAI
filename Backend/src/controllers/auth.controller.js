@@ -4,10 +4,12 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import tokenBlacklistModel from "../models/blacklist.model.js";
 
+const isProduction = process.env.NODE_ENV === "production" || process.env.RENDER === "true";
+
 const cookieOptions = {
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
@@ -38,6 +40,10 @@ async function registerUserController(req, res) {
         email,
         password: hash,
     });
+
+    if (!process.env.JWT_SECRET) {
+        throw new Error("JWT_SECRET is not configured");
+    }
 
     const token = jwt.sign(
         { id: user._id, username: user.username },
@@ -77,6 +83,10 @@ async function loginUserController(req, res) {
         return res.status(400).json({
             message: "Password is incorrect",
         });
+    }
+
+    if (!process.env.JWT_SECRET) {
+        throw new Error("JWT_SECRET is not configured");
     }
 
     const token = jwt.sign(
