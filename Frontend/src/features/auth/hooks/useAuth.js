@@ -23,10 +23,17 @@ export const useAuth = () => {
         setLoading(true)
         try {
             const data = await login({ email, password })
-            return setAuthState(data)
-        } catch {
+            const success = setAuthState(data)
+            return {
+                success,
+                message: success ? "" : "Login response did not include a user."
+            }
+        } catch (error) {
             setUser(null)
-            return false
+            return {
+                success: false,
+                message: error.response?.data?.message || error.message || "Unable to sign in. Please try again."
+            }
         } finally {
             setLoading(false)
         }

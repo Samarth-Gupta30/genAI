@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Unified Axios Instance
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
+    baseURL: import.meta.env.VITE_API_BASE_URL || "https://genai-backend-api.onrender.com",
     withCredentials: true,
 });
 

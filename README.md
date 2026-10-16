@@ -82,13 +82,13 @@ cd Backend
 npm install
 ```
 
-Create a `.env` file in `Backend/` (adjust names to match your code):
+Create a `.env` file in `Backend/`:
 
 ```env
 PORT=5000
-MONGODB_URI=your_mongodb_atlas_connection_string
+MONGO_URI=your_mongodb_atlas_connection_string
 JWT_SECRET=your_jwt_secret
-GEMINI_API_KEY=your_gemini_api_key
+GOOGLE_GENAI_API_KEY=your_gemini_api_key
 FRONTEND_URL=http://localhost:5173
 ```
 
@@ -112,6 +112,17 @@ Create a `.env` file in `Frontend/`:
 ```env
 VITE_API_BASE_URL=http://localhost:3000
 ```
+
+For Render:
+
+- Configure the backend as a **Web Service** with root directory `Backend`, build command `npm install`, and start command `npm start`.
+- Set these backend environment variables: `MONGO_URI`, `JWT_SECRET`, `GOOGLE_GENAI_API_KEY`, `FRONTEND_URL` (the frontend's exact origin), and `NODE_ENV=production`.
+- Create the frontend as a **Static Site** with root directory `Frontend`, build command `npm install && npm run build`, and publish directory `dist`.
+- Set `VITE_API_BASE_URL` to the backend service URL (for example, `https://genai-backend-api.onrender.com`) in the frontend service environment, then redeploy it.
+- Add a rewrite from `/*` to `/index.html` with status `200` so direct visits to React Router pages work.
+- The backend listens on Render's `PORT`; it also accepts `MONGODB_URI` in place of `MONGO_URI`.
+
+Run backend smoke tests with `cd Backend && npm test`. The frontend checks are `cd Frontend && npm run lint && npm run build`.
 
 Start the dev server:
 

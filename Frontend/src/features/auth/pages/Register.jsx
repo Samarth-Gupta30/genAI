@@ -57,6 +57,7 @@ if(loading){
               <input
                 onChange={(e) => setUsername(e.target.value)}
                 type="text"
+                required
                 id="username"
                 name='username'
                 placeholder='Enter name'
@@ -68,6 +69,7 @@ if(loading){
               <input
                 onChange ={(e) => setEmail(e.target.value)}
                 type="email"
+                required
                 id="email"
                 name='email'
                 placeholder='Enter email address'
@@ -79,6 +81,7 @@ if(loading){
               <input
                 onChange ={(e) => setPassword(e.target.value)}
                 type="password"
+                required
                 id="password"
                 name='password'
                 placeholder='Enter password'

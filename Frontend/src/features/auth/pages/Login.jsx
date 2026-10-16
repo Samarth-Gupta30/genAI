@@ -8,6 +8,7 @@ const Login =() =>{
 const { loading, user, handleLogin } = useAuth()
 const [email, setEmail] = useState("")
 const [password, setPassword] = useState("")
+const [error, setError] = useState("")
 const navigate = useNavigate();
 
 useEffect(() => {
@@ -18,9 +19,12 @@ useEffect(() => {
 
 const handleSubmit = async(e) => {
         e.preventDefault();
-        const success = await handleLogin({email, password})
-        if (success) {
+        setError("")
+        const result = await handleLogin({email, password})
+        if (result?.success) {
             navigate("/", { replace: true })
+        } else {
+            setError(result?.message || "Unable to sign in. Please try again.")
         }
     };
 
@@ -45,6 +49,7 @@ if(loading){
         <div className="form-container">
           <h1 className="auth-card-title">Welcome Back</h1>
           <p className="auth-card-subtitle">Please enter your details to sign in.</p>
+          {error && <p className="auth-error" role="alert">{error}</p>}
 
           <form onSubmit={handleSubmit} className="auth-form">
             <div className="input-group">
@@ -52,6 +57,7 @@ if(loading){
               <input
                 onChange={(e)=>{setEmail(e.target.value)}}
                 type="email"
+                required
                 id="email"
                 name='email'
                 placeholder='Enter email address'
@@ -66,6 +72,7 @@ if(loading){
               <input
                 onChange={(e)=>{setPassword(e.target.value)}}
                 type="password"
+                required
                 id="password"
                 name='password'
                 placeholder='Enter password'
