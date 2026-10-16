@@ -71,9 +71,9 @@ async function generateInterviewReportController(req, res) {
             return res.status(400).json({ message: "Job description is required" });
         }
 
-        if (!req.file && !selfDescription?.trim()) {
+        if (!req.file || !selfDescription?.trim()) {
             return res.status(400).json({
-                message: "Either a resume or a self description is required",
+                message: "A resume and a self description are required",
             });
         }
 

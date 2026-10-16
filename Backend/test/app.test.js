@@ -3,6 +3,7 @@ import { after, before, test } from "node:test";
 
 process.env.GOOGLE_GENAI_API_KEY ??= "test-api-key";
 const { default: app } = await import("../src/app.js");
+const { generateInterviewReportController } = await import("../src/controllers/interview.controller.js");
 
 let server;
 let baseUrl;
@@ -68,4 +69,42 @@ test("register rejects missing fields without requiring a database", async () =>
         success: false,
         message: "All fields are required",
     });
+});
+
+test("interview report requires both a resume and a self-description", async () => {
+    const requests = [
+        {
+            body: {
+                jobDescription: "Frontend engineer",
+                selfDescription: "Experienced frontend engineer",
+            },
+            user: { id: "test-user" },
+        },
+        {
+            file: { buffer: Buffer.from("") },
+            body: { jobDescription: "Frontend engineer" },
+            user: { id: "test-user" },
+        },
+    ];
+
+    for (const request of requests) {
+        const response = {
+            statusCode: 200,
+            status(code) {
+                this.statusCode = code;
+                return this;
+            },
+            json(body) {
+                this.body = body;
+                return this;
+            },
+        };
+
+        await generateInterviewReportController(request, response);
+
+        assert.equal(response.statusCode, 400);
+        assert.deepEqual(response.body, {
+            message: "A resume and a self description are required",
+        });
+    }
 });

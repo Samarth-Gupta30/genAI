@@ -29,10 +29,15 @@ const navigate = useNavigate();
 const handleGenerateReport = async () => {
         if (isGenerating) return;
 
+        const resumeFile = resumeInputRef.current?.files?.[0]
+        if (!jobDescription.trim() || !resumeFile || !selfDescription.trim()) {
+            alert('Please provide a job description, upload a resume, and enter a self-description to generate your interview plan.');
+            return;
+        }
+
         setIsGenerating(true);
 
         try { 
-            const resumeFile = resumeInputRef.current?.files?.[0]
             const report = await generateReport({ jobDescription, selfDescription, resumeFile })
 
             const reportId = report?._id || report?.id
@@ -156,7 +161,7 @@ if(loading) return (<main><Loader /></main>)
                             </div>
                         </div>
 
-                        <div className="divider">OR</div>
+                        <div className="divider">AND</div>
 
                         <div className="profile-field">
                             <label className="field-label">Quick Self-Description</label>
@@ -164,13 +169,13 @@ if(loading) return (<main><Loader /></main>)
                                 onChange={(e) => setSelfDescription(e.target.value)}
                                 id="selfDescription"
                                 name="selfDescription"
-                                placeholder="Briefly describe your experience, key skills, and years of experience you don't have a resume handy."
+                                placeholder="Briefly describe your experience, key skills, and years of experience."
                             />
                         </div>
 
                         <div className="require-note">
                             <span className="note-icon">i</span>
-                            Either a Resume or a Self Description is required to generate a personalized plan.
+                            A resume and a self-description are both required to generate a personalized plan.
                         </div>
 
                         <button
