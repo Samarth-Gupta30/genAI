@@ -1,4 +1,4 @@
-import {useState,useRef} from 'react'
+import {useState} from 'react'
 import '../style/home.scss'
 import {useInterview} from "../hooks/useInterview.js";
 import { useAuth } from "../../auth/hooks/useAuth";
@@ -11,17 +11,14 @@ const {loading,generateReport} = useInterview()
 const { handleLogout } = useAuth()
 const [jobDescription,setJobDescription] = useState("")
 const [selfDescription,setSelfDescription] = useState("")
-const resumeInputRef = useRef()
 const [loggingOut, setLoggingOut] = useState(false);
 const [isGenerating, setIsGenerating] = useState(false);
-const [selectedFileName, setSelectedFileName] = useState("");
+const [resumeFile, setResumeFile] = useState(null);
 const [isDownloadingResume, setIsDownloadingResume] = useState(false);
 
 const handleFileSelect = (e) => {
     const file = e.target.files?.[0];
-    if (file) {
-        setSelectedFileName(file.name);
-    }
+    setResumeFile(file || null);
 };
 
 const navigate = useNavigate();
@@ -29,7 +26,6 @@ const navigate = useNavigate();
 const handleGenerateReport = async () => {
         if (isGenerating) return;
 
-        const resumeFile = resumeInputRef.current?.files?.[0]
         if (!jobDescription.trim() || !resumeFile || !selfDescription.trim()) {
             alert('Please provide a job description, upload a resume, and enter a self-description to generate your interview plan.');
             return;
@@ -138,14 +134,13 @@ if(loading) return (<main><Loader /></main>)
                                     name="resume"
                                     id="resume"
                                     accept=".pdf,.doc,.docx"
-                                    ref={resumeInputRef}
                                     onChange={handleFileSelect}
                                 />
-                                <label htmlFor="resume" className={`upload-label ${selectedFileName ? 'file-selected' : ''}`}>
-                                    {selectedFileName ? (
+                                <label htmlFor="resume" className={`upload-label ${resumeFile ? 'file-selected' : ''}`}>
+                                    {resumeFile ? (
                                         <>
                                             <div className="checkmark-icon">✓</div>
-                                            <div className="upload-text selected-text">{selectedFileName}</div>
+                                            <div className="upload-text selected-text">{resumeFile.name}</div>
                                             <small>Click to change file</small>
                                         </>
                                     ) : (
