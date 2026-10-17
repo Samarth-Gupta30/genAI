@@ -40,7 +40,16 @@ const handleGenerateReport = async () => {
 
             if (reportId) {
                 navigate(`/interview/${reportId}`)
+            } else {
+                throw new Error('The generated interview strategy did not include a report ID.')
             }
+        } catch (error) {
+            console.error('Failed to generate interview strategy:', error)
+            const message = error.response?.data?.error
+                || error.response?.data?.message
+                || error.message
+                || 'Failed to generate your interview strategy. Please try again.'
+            alert(message)
         } finally {
             setIsGenerating(false);
         }
@@ -133,7 +142,7 @@ if(loading) return (<main><Loader /></main>)
                                     type="file"
                                     name="resume"
                                     id="resume"
-                                    accept=".pdf,.doc,.docx"
+                                    accept=".pdf,application/pdf"
                                     onChange={handleFileSelect}
                                 />
                                 <label htmlFor="resume" className={`upload-label ${resumeFile ? 'file-selected' : ''}`}>
@@ -149,7 +158,7 @@ if(loading) return (<main><Loader /></main>)
                                             <div className="upload-text">
                                                 Click to upload or drag &amp; drop
                                             </div>
-                                            <small>PDF or DOCX (Max 5MB)</small>
+                                            <small>PDF only (Max 3MB)</small>
                                         </>
                                     )}
                                 </label>
